@@ -1,3 +1,4 @@
+import cloudinary from "../lib/cloudinary.js";
 import Message from "../models/message.model.js";
 
 export const getUsersForSidebar = async (req, res) => {
@@ -37,5 +38,26 @@ export const sendMessage = async (req, res) => {
     const { text, image } = req.body;
     const { id: receiverId } = req.params;
     const senderId = req.user._id;
-  } catch (error) {}
+
+    let imageUrl;
+    if (image) {
+      // Upload base64 image to cloudinary
+      const uploadResponse = await cloudinary.uploader.upload(image);
+      imageUrl = uploadResponse.secure_url;
+    }
+
+    const newMessage = new Message({
+      senderId,
+      receiverId,
+      text,
+      image: imageUrl,
+    });
+    await newMessage.save();
+
+    //todo: real time socket.io functionallity
+    res.status(201).json(newMessage);
+  } catch (error) {
+    console.log("Error in sendMessage: ", error.message);
+    res.status(500).send("Internal server error");
+  }
 };
