@@ -7,13 +7,15 @@ export const signup = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
     if (!fullName || !email || !password) {
-      res.status(400).send("All fields are required!");
+      res.status(400).json({ message: "All fields are required!" });
     }
     if (password.length < 6) {
-      res.status(400).send("Password must be at least 6 characters");
+      res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters" });
     }
     const user = await User.findOne({ email });
-    if (user) return res.status(400).send("Email already exists");
+    if (user) return res.status(400).json({ message: "Email already exists" });
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -30,7 +32,7 @@ export const signup = async (req, res) => {
       await newUser.save();
       res.status(201).send(newUser);
     } else {
-      res.status(400).send("Invalid User data");
+      res.status(400).json({ message: "Invalid user data" });
     }
   } catch (error) {
     res.status(500).send("Server Error");
@@ -42,11 +44,11 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).send("Invalid credentials");
+      return res.status(400).json({ message: "Invalid credentials" });
     }
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
-      return res.status(400).send("Invalid credentials");
+      return res.status(400).json({ message: "Invalid credentials" });
     }
     generateToken(user._id, res);
 
@@ -60,7 +62,7 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
-    res.status(200).send("Logged out successfully");
+    res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.log("Error in logout", error.message);
     res.status(500).send("Server Error");
