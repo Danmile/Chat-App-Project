@@ -13,6 +13,7 @@ export const useAuthStore = create((set, get) => ({
   isUpdatingProfile: false,
   onlineUsers: [],
   socket: null,
+  captchaValue: null,
 
   checkAuth: async () => {
     try {
@@ -93,5 +94,13 @@ export const useAuthStore = create((set, get) => ({
   },
   disconnectSocket: () => {
     if (get().socket?.connected) get().socket?.disconnect();
+  },
+  setCaptcha: (value) => {
+    set({ captchaValue: value });
+    // console.log(captchaValue);
+  },
+  removeCaptcha: () => {
+    if (get().captchaValue) set({ captchaValue: null });
+    // console.log(captchaValue);
   },
 }));

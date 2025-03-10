@@ -3,6 +3,8 @@ import { useAuthStore } from "../store/useAuthStore";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
+import Recaptcha from "../components/Recaptcha";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,10 +13,21 @@ const LoginPage = () => {
     password: "",
   });
   const { login, isLoggingIn } = useAuthStore();
+  const { captchaValue, removeCaptcha } = useAuthStore();
+  // const [captchaValue, setCaptchaValue] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(captchaValue);
+    if (!captchaValue) {
+      toast.error("Please complete all the fields");
+      return;
+    }
+    // if (!captchaValue) {
+    //   return toast.error("All the fields must be completed");
+    // }
     login(formData);
+    removeCaptcha();
   };
 
   return (
@@ -104,6 +117,8 @@ const LoginPage = () => {
               )}
             </button>
           </form>
+
+          <Recaptcha />
 
           <div className="text-center">
             <p className="text-base-content/60">

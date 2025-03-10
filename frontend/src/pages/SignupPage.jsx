@@ -12,6 +12,7 @@ import {
 import { Link } from "react-router-dom";
 import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
+import Recaptcha from "../components/Recaptcha";
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +22,7 @@ const SignupPage = () => {
     password: "",
   });
 
-  const { signup, isSigningUp } = useAuthStore();
+  const { signup, isSigningUp, captchaValue, removeCaptcha } = useAuthStore();
 
   const validateForm = () => {
     if (!formData.fullName.trim()) {
@@ -43,9 +44,14 @@ const SignupPage = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!captchaValue) {
+      toast.error("Please complete all the fields");
+      return;
+    }
     const success = validateForm();
     if (success === true) {
       signup(formData);
+      removeCaptcha();
     }
   };
   return (
@@ -140,6 +146,7 @@ const SignupPage = () => {
                 </button>
               </div>
             </div>
+            <Recaptcha />
 
             <button
               type="submit"
