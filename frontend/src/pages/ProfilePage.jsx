@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import { Camera, Mail, User } from "lucide-react";
+import { Camera, Mail, User, CircleSmall } from "lucide-react";
 
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
@@ -87,6 +87,19 @@ const ProfilePage = () => {
               </div>
               <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
                 {authUser?.email}
+              </p>
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="text-sm text-zinc-400 flex items-center gap-2">
+                <CircleSmall className="w-4 h-4" />
+                Gender
+              </div>
+              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
+                {authUser?.gender
+                  ? authUser?.gender.charAt(0).toUpperCase() +
+                    authUser?.gender.slice(1)
+                  : "Other"}
               </p>
             </div>
           </div>

@@ -5,8 +5,8 @@ import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
   try {
-    const { fullName, email, password } = req.body;
-    if (!fullName || !email || !password) {
+    const { fullName, email, password, gender } = req.body;
+    if ((!fullName || !email || !password, !gender)) {
       res.status(400).json({ message: "All fields are required!" });
     }
     if (password.length < 6) {
@@ -22,6 +22,7 @@ export const signup = async (req, res) => {
 
     const newUser = new User({
       fullName,
+      gender,
       email,
       password: hashedPassword,
     });
