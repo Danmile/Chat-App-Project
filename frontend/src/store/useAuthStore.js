@@ -14,6 +14,7 @@ export const useAuthStore = create((set, get) => ({
   onlineUsers: [],
   socket: null,
   captchaValue: null,
+  isResetPasswod: false,
 
   checkAuth: async () => {
     try {
@@ -28,7 +29,6 @@ export const useAuthStore = create((set, get) => ({
     }
   },
   signup: async (data) => {
-    console.log(data);
     set({ isSigninUp: true });
     try {
       const res = await axiosInstance.post("/auth/signup", data);
@@ -52,6 +52,36 @@ export const useAuthStore = create((set, get) => ({
       toast.error(error.response.data.message);
     } finally {
       set({ isLoggingIn: false });
+    }
+  },
+  sendResetEmail: async (email) => {
+    set({ isResetPasswod: true });
+    try {
+      await axiosInstance.post("/auth/forgot-password", email);
+      toast.success("Reset Email sent!");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isResetPasswod: false });
+    }
+  },
+  resetPassword: async (password, token) => {
+    set({ isResetPasswod: true });
+    try {
+      const res = await axiosInstance.post(
+        `/auth/reset-password/${token}`,
+        password
+      );
+      toast.success("Password Changed");
+      // console.log(authUser);
+      // console.log(res.data);
+      set({ authUser: res.data });
+      get().connectSocket();
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.log(error);
+    } finally {
+      set({ isResetPasswod: false });
     }
   },
   logout: async () => {

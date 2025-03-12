@@ -17,5 +17,8 @@
     "url": "https://github.com/Danmile/Chat-App-Project/issues"
   },
   "homepage": "https://github.com/Danmile/Chat-App-Project#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "nodemailer": "^6.10.0"
+  }
 }
