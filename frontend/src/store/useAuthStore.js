@@ -73,8 +73,6 @@ export const useAuthStore = create((set, get) => ({
         password
       );
       toast.success("Password Changed");
-      // console.log(authUser);
-      // console.log(res.data);
       set({ authUser: res.data });
       get().connectSocket();
     } catch (error) {
