@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Camera, Mail, User, CircleSmall } from "lucide-react";
+import AvatarsCard from "../components/AvatarsCard";
 
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
   const [selectedImg, setSelectedImg] = useState(null);
+  const [showAvatars, setShowAvatars] = useState(false);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -37,8 +39,16 @@ const ProfilePage = () => {
               <img
                 src={selectedImg || authUser.profilePic || "/avatar.png"}
                 alt="Profile"
-                className="size-32 rounded-full object-cover border-4 "
+                className={`size-32 rounded-full object-cover border-4 ${
+                  isUpdatingProfile ? "animate-pulse pointer-events-none" : ""
+                }`}
               />
+              <button
+                className="p-2 bg-base-content rounded-full"
+                onClick={() => setShowAvatars(true)}
+              >
+                <User className="w-5 h-5 text-base-200" />
+              </button>
               <label
                 htmlFor="avatar-upload"
                 className={`
@@ -46,9 +56,6 @@ const ProfilePage = () => {
                   bg-base-content hover:scale-105
                   p-2 rounded-full cursor-pointer 
                   transition-all duration-200
-                  ${
-                    isUpdatingProfile ? "animate-pulse pointer-events-none" : ""
-                  }
                 `}
               >
                 <Camera className="w-5 h-5 text-base-200" />
@@ -61,6 +68,14 @@ const ProfilePage = () => {
                   disabled={isUpdatingProfile}
                 />
               </label>
+              {showAvatars && (
+                <div className="absolute top-[105%] left-[20%] transform -translate-x-1/2 w-60 bg-white shadow-lg rounded-lg">
+                  <AvatarsCard
+                    setShowAvatars={setShowAvatars}
+                    showAvatars={showAvatars}
+                  />
+                </div>
+              )}
             </div>
             <p className="text-sm text-zinc-400">
               {isUpdatingProfile

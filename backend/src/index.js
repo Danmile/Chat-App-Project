@@ -1,5 +1,6 @@
 import express from "express";
 import authRoutes from "./routes/auth.route.js";
+import avatarRoutes from "./routes/avatar.route.js";
 import messageRoutes from "./routes/message.route.js";
 import dotenv from "dotenv";
 import { connectDB } from "./lib/db.js";
@@ -22,6 +23,7 @@ app.use(
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/avatars", avatarRoutes);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
