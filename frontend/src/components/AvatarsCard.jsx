@@ -8,8 +8,6 @@ const AvatarsCard = ({ setShowAvatars, showAvatars }) => {
 
   const handleImageUpload = async (image) => {
     try {
-      console.log(avatars);
-      console.log("Updating profile with:", image);
       await updateProfile({ profilePic: image });
       setShowAvatars(false); // Close the modal after updating
     } catch (error) {
