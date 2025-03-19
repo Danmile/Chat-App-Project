@@ -1,20 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 
 const AvatarsCard = ({ setShowAvatars, showAvatars }) => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
-  const avatars = [
-    "https://api.dicebear.com/8.x/adventurer/svg?seed=1",
-    "https://api.dicebear.com/8.x/adventurer/svg?seed=2",
-    "https://api.dicebear.com/8.x/adventurer/svg?seed=3",
-    "https://api.dicebear.com/8.x/adventurer/svg?seed=4",
-    "https://api.dicebear.com/8.x/adventurer/svg?seed=5",
-    "https://api.dicebear.com/8.x/adventurer/svg?seed=5",
-  ];
+  const { avatars, getAvatars } = useAuthStore();
 
   const handleImageUpload = async (image) => {
     try {
+      console.log(avatars);
       console.log("Updating profile with:", image);
       await updateProfile({ profilePic: image });
       setShowAvatars(false); // Close the modal after updating

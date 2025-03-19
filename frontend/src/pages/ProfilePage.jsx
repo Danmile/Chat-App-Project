@@ -4,7 +4,8 @@ import { Camera, Mail, User, CircleSmall } from "lucide-react";
 import AvatarsCard from "../components/AvatarsCard";
 
 const ProfilePage = () => {
-  const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
+  const { authUser, isUpdatingProfile, updateProfile, getAvatars } =
+    useAuthStore();
   const [selectedImg, setSelectedImg] = useState(null);
   const [showAvatars, setShowAvatars] = useState(false);
 
@@ -45,7 +46,10 @@ const ProfilePage = () => {
               />
               <button
                 className="p-2 bg-base-content rounded-full"
-                onClick={() => setShowAvatars(true)}
+                onClick={() => {
+                  setShowAvatars(true);
+                  getAvatars();
+                }}
               >
                 <User className="w-5 h-5 text-base-200" />
               </button>

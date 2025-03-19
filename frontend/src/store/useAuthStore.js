@@ -15,6 +15,7 @@ export const useAuthStore = create((set, get) => ({
   socket: null,
   captchaValue: null,
   isResetPasswod: false,
+  avatars: [],
 
   checkAuth: async () => {
     try {
@@ -130,5 +131,16 @@ export const useAuthStore = create((set, get) => ({
   removeCaptcha: () => {
     if (get().captchaValue) set({ captchaValue: null });
     // console.log(captchaValue);
+  },
+  getAvatars: async () => {
+    try {
+      const res = await axiosInstance.get("/avatars/getavatars");
+      const avatarImages = res.data.avatars?.map((avatar) => avatar.avatarImg);
+
+      set({ avatars: avatarImages });
+    } catch (error) {
+      console.log("error in get avatars:", error);
+      toast.error(error.response.data.message);
+    }
   },
 }));
